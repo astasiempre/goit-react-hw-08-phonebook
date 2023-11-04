@@ -5,17 +5,13 @@ import Loader from './Loader/Loader';
 import Navigation from './Navigation/Navigation';
 
 
-// const HomePage = lazy(() => import('pages/HomePage'));
-// const MoviesPage = lazy(() => import('pages/MoviesPage'));
-// const MovieDatailesPage = lazy(() => import('pages/MovieDatailesPage'));
+
 const RegisterPage = lazy(() => import('pages/RegisterPage'));
 const LoginPage = lazy(() => import('pages/LoginPage'));
 const ConatctsPage = lazy(() => import('pages/ContactsPage'));
 
 const appRoutes = [
-  // {path: '/', element: <HomePage />},
-  // { path: '/movies', element: <MoviesPage /> },
-  // { path: '/movies/:movieId/*', element: <MovieDatailesPage /> },
+  
   { path: '/register', element: <RegisterPage /> },
   { path: '/login', element: <LoginPage /> },
   { path: '/contacts', element: <ConatctsPage /> },

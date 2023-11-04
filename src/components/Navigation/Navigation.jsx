@@ -10,12 +10,7 @@ const Navigation = () => {
   return (
     <header>
       <nav>
-        {/* <NavLink className="header-link" to="/">
-          Home
-        </NavLink>
-        <NavLink className="header-link" to="/movies">
-          Movies
-        </NavLink> */}
+        
         <NavLink className="header-link" to="/register">
           Register
         </NavLink>
