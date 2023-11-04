@@ -1,6 +1,6 @@
 import { requestLogin, requestRegister } from 'services/phoneBookApi';
 
-const { createSlice, createAsyncThunk } = require('@reduxjs/toolkit');
+const {  createAsyncThunk, createSlice } = require('@reduxjs/toolkit');
 
 export const loginThunk = createAsyncThunk(
   'auth/login',
@@ -19,9 +19,9 @@ export const registerThunk = createAsyncThunk(
   'auth/register',
   async (formData, thunkAPI) => {
     try {
-      const responses = await requestRegister(formData);
-      console.log(responses);
-      return responses;
+      const authData = await requestRegister(formData);
+      console.log(authData);
+      return authData;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -29,7 +29,9 @@ export const registerThunk = createAsyncThunk(
 );
 
 const INITIAL_STATE = {
-  
+  user: { name: null, email: null },
+  token: null,
+  authenticated: false,
     isLoading: false,
     error: null,
 };
@@ -48,21 +50,38 @@ const authSlice = createSlice({
 
   extraReducers: builder =>
     builder
-    //   .addCase(fetchContacts.pending, state => {
-    //     state.contacts.isLoading = true;
-    //     state.contacts.error = null;
-    //   })
-    //   .addCase(fetchContacts.fulfilled, (state, action) => {
-    //     state.contacts.isLoading = false;
-    //     state.contacts.items = action.payload;
-    //   })
-    //   .addCase(fetchContacts.rejected, (state, action) => {
-    //     state.contacts.isLoading = false;
-    //     state.contacts.error = action.payload;
-    //   })
+      .addCase(registerThunk.pending, state => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(registerThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.authenticated = true;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+      })
+      .addCase(registerThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+  .addCase(loginThunk.pending, state => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.authenticated = true;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+      })
+      .addCase(loginThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
       
       
       
       
 });
 
+export const authReducer = authSlice.reducer;

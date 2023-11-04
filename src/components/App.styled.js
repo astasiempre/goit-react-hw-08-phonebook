@@ -4,7 +4,8 @@ export const StyledAppContainer = styled.div`
 
     header {
         display: flex;
-        align-items: center;
+        justify-content: space-between;
+        /* align-items: center; */
         padding: 20px;
         box-shadow: 0px 8px 3px 0px rgba(140,130,135,1);
 margin-bottom: 20px;
