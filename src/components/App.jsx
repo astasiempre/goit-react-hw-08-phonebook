@@ -1,8 +1,12 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { StyledAppContainer } from './App.styled';
 import Loader from './Loader/Loader';
 import Navigation from './Navigation/Navigation';
+import { useDispatch } from 'react-redux';
+import { refreshThunk } from 'redux/authReducer';
+import RestrictedRoute from './RestrictedRoute/RestrictedRoute';
+import PrivateRoute from './PrivatRoute/PrivatRoute';
 
 
 
@@ -11,13 +15,38 @@ const LoginPage = lazy(() => import('pages/LoginPage'));
 const ConatctsPage = lazy(() => import('pages/ContactsPage'));
 
 const appRoutes = [
-  
-  { path: '/register', element: <RegisterPage /> },
-  { path: '/login', element: <LoginPage /> },
-  { path: '/contacts', element: <ConatctsPage /> },
+  {
+    path: '/register',
+    element: (
+      <RestrictedRoute>
+        <RegisterPage />
+      </RestrictedRoute>
+    ),
+  },
+  {
+    path: '/login',
+    element: (
+      <RestrictedRoute>
+        <LoginPage />
+      </RestrictedRoute>
+    ),
+  },
+  {
+    path: '/contacts',
+    element: (
+      <PrivateRoute>
+        <ConatctsPage />
+      </PrivateRoute>
+    ),
+  },
 ];
 
 export const App = () => {
+ const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(refreshThunk());
+   }, [dispatch]);
   return (
     <>
       <StyledAppContainer>

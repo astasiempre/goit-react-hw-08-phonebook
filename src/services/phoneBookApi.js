@@ -2,9 +2,7 @@ import axios from "axios";
 
 const phoneBookInstance = axios.create({
     baseURL: "https://connections-api.herokuapp.com/",
-    // headers: {
-    //     "Authorisation": "Bearer...",
-    // },
+ 
 });
 
 export const setToken = (token) => {
@@ -31,4 +29,26 @@ export const requestLogout = async () => {
 export const requestRefreshUser = async () => {
     const { data } = await phoneBookInstance.get("/users/current");
     return data;
+}
+
+ export const requestContacts = async () => {
+   const { data } = await phoneBookInstance.get(
+    '/contacts'
+  );
+  return data;
+}
+
+export const requestAddContact = async (newContact) => {
+  const { data } = await phoneBookInstance.post(
+    '/contacts',
+    newContact
+  );
+  return data;
+}
+
+export const requestDeleteContact = async (contactId) => {
+ const {data} = await phoneBookInstance.delete(
+    `/contacts/${contactId}`
+  );
+  return data;
 }
