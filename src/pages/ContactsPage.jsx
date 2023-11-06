@@ -16,8 +16,8 @@ const {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
   const isLoading = useSelector(selectContactsIsloading);
-  const error = useSelector(selectContactsError);
-  const filterTerm = useSelector(selectContactsFilterTerm);
+  // const error = useSelector(selectContactsError);
+  // const filterTerm = useSelector(selectContactsFilterTerm);
   
   useEffect(() => {
     dispatch(fetchContacts());
