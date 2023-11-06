@@ -3,10 +3,11 @@ import { Routes, Route } from 'react-router-dom';
 import { StyledAppContainer } from './App.styled';
 import Loader from './Loader/Loader';
 import Navigation from './Navigation/Navigation';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { refreshThunk } from 'redux/authReducer';
 import RestrictedRoute from './RestrictedRoute/RestrictedRoute';
 import PrivateRoute from './PrivatRoute/PrivatRoute';
+import { selectAuthIsloading } from 'redux/authSelectors';
 
 
 
@@ -42,8 +43,9 @@ const appRoutes = [
 ];
 
 export const App = () => {
- const dispatch = useDispatch();
-
+  const dispatch = useDispatch();
+  
+const isRefreshing = useSelector(selectAuthIsloading);
   useEffect(() => {
     dispatch(refreshThunk());
    }, [dispatch]);
@@ -52,13 +54,14 @@ export const App = () => {
       <StyledAppContainer>
         <Navigation />
         
-        <Suspense fallback={<Loader />}>
+        {isRefreshing ? <Loader /> : <Suspense fallback={<Loader />}>
           <Routes>
             {appRoutes.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
             ))}
           </Routes>
         </Suspense>
+        }
       </StyledAppContainer>
     </>
   );

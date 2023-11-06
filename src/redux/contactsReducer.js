@@ -82,15 +82,20 @@ const contactsSlice = createSlice({
     //     state.contacts.error = null;
     //   })
       .addCase(addContact.fulfilled, (state, action) => {
-        state.contacts.isLoading = false;
-        state.contacts.unshift(action.payload);
+        state.isLoading = false;
+        if (Array.isArray(state.contacts)) {
+          
+          state.contacts.unshift(action.payload);
+        } else {
+          state.contacts = [action.payload];
+        }
       })
     //   .addCase(addContact.rejected, (state, action) => {
     //     state.contacts.isLoading = false;
     //     state.contacts.error = action.payload;
     //   })
     .addCase(deleteContact.fulfilled, (state, action) => {
-      state.contacts.isLoading = false;
+      state.isLoading = false;
       state.contacts = state.contacts.filter(
         contact => contact.id !== action.payload.id,
       );
