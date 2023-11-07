@@ -59,7 +59,7 @@ const contactsSlice = createSlice({
 
   reducers: {
     setFilterTerm: (state, action) => {
-      state.filter = action.payload;
+      state.filterTerm = action.payload;
     },
   },
 

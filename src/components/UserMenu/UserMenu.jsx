@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyledUserMenuContainer } from './UserMenu.styled';
+import { ButtonLogout } from 'components/Navigation/Navigation.styled';
 
 const UserMenu = ({ onLogOut }) => {
   return (
     <StyledUserMenuContainer>
       <p className="userEmail">mango@mail.com</p>
-      {/* <button onClick={onLogOut}>Logout</button> */}
-      <button onClick={onLogOut}>Logout</button>
+      <ButtonLogout onClick={onLogOut}>Logout</ButtonLogout>
     </StyledUserMenuContainer>
   );
 };

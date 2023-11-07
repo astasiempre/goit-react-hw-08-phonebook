@@ -1,42 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { fetchMoviesTrend } from '../services/movies';
-import { Link } from 'react-router-dom';
-import Loader from 'components/Loader/Loader';
-import ErrorMessage from 'components/ErrorMessage/ErrorMessage';
+import React from 'react';
+import { useSpring, animated } from 'react-spring';
+
+const centeredContentStyle = {
+  display: 'flex',
+  fontsize: '100px',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
+};
+
+const largeFontStyle = {
+  fontSize: '80px',
+  color: 'red',
+};
 
 const HomePage = () => {
-  const [movies, setMovies] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        setIsLoading(true);
-        const moviesData = await fetchMoviesTrend();
-        setMovies(moviesData);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMovies();
-  }, []);
+  const animationProps = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: { duration: 1000 },
+  });
 
   return (
-    <div>
-      {isLoading && <Loader />}
-      {error && <ErrorMessage message={error} />}
-      <h1>Trending today</h1>
-      {movies !== null &&
-        movies.map(movie => (
-          <Link to={`/movies/${movie.id}`} key={movie.id}>
-            <li>{movie.title}</li>
-          </Link>
-        ))}
-    </div>
+    <animated.div style={{ ...centeredContentStyle, ...animationProps }}>
+      <h1 style={largeFontStyle}>PhoneBook App</h1>
+    </animated.div>
   );
 };
 

@@ -1,29 +1,30 @@
 import UserMenu from 'components/UserMenu/UserMenu';
-import React from 'react'
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
 import { logOutThunk } from 'redux/authReducer';
 import { selectAuthIsAuthenticated } from 'redux/authSelectors';
+import { ContainerContactsUser, NavContainer } from './Navigation.styled';
 
 const Navigation = () => {
- 
-const authenticated = useSelector(selectAuthIsAuthenticated);
-const dispatch = useDispatch();
+  const authenticated = useSelector(selectAuthIsAuthenticated);
+  const dispatch = useDispatch();
   const onLogOut = () => {
     dispatch(logOutThunk());
-  }
+  };
   return (
     <header>
-      <nav>
+      <NavContainer>
+        <NavLink className="header-link" to="/">
+          Home
+        </NavLink>
         {authenticated ? (
-          <>
+          <ContainerContactsUser>
             <NavLink className="header-link" to="/contacts">
               Contacts
             </NavLink>
-            {/* <button onClick={onLogOut}>Logout</button> */}
-            {/* <UserMenu onLogOut={onLogOut} /> */}
             <UserMenu onLogOut={onLogOut} />
-          </>
+          </ContainerContactsUser>
         ) : (
           <>
             <NavLink className="header-link" to="/register">
@@ -34,11 +35,9 @@ const dispatch = useDispatch();
             </NavLink>
           </>
         )}
-      </nav>
-
-      {/* <UserMenu /> */}
+      </NavContainer>
     </header>
   );
-}
+};
 
-export default Navigation
+export default Navigation;

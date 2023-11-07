@@ -1,73 +1,61 @@
+import ContactList from 'components/ContactList/ContactList';
+import Filter from 'components/Filter/Filter';
 import Loader from 'components/Loader/Loader';
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux'
-import { addContact, deleteContact, fetchContacts } from 'redux/contactsReducer';
-import { selectContacts, selectContactsError, selectContactsFilterTerm, selectContactsIsloading } from 'redux/contactsSelectors';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addContact,
+  deleteContact,
+  fetchContacts,
+  setFilterTerm,
+} from 'redux/contactsReducer';
+import {
+  selectContacts,
+  selectContactsError,
+  selectContactsFilterTerm,
+  selectContactsIsloading,
+} from 'redux/contactsSelectors';
 
+import ContactForm from 'components/ContactForm/ContactForm';
+import ErrorMessage from 'components/ErrorMessage/ErrorMessage';
 const ContactsPage = () => {
-const {
-  register,
-  handleSubmit,
-  reset,
-  formState: { errors },
-} = useForm();
-
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
   const isLoading = useSelector(selectContactsIsloading);
-  // const error = useSelector(selectContactsError);
-  // const filterTerm = useSelector(selectContactsFilterTerm);
-  
+  const error = useSelector(selectContactsError);
+  const filterTerm = useSelector(selectContactsFilterTerm);
+  const { reset } = useForm();
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const onSubmit = (contact) => {
+  const onSubmit = contact => {
     dispatch(addContact(contact));
     reset();
-  }
-    
-  const onDeleteContact = (contactId) => {
+  };
+
+  const onDeleteContact = contactId => {
     dispatch(deleteContact(contactId));
-  }
+  };
+
+  const handleFilterChange = filterTerm => {
+    dispatch(setFilterTerm(filterTerm));
+  };
   return (
     <>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <label>
-        <span>Name:</span>
-        <input {...register('name', { required: true })} type="text" />
-        {errors.name && <span>This field is required</span>}
-      </label>
-      <label>
-        <span>Number:</span>
-        <input {...register('number', { required: true })} type="text" />
-        {errors.number && <span>This field is required</span>}
-      </label>
+      <ContactForm onSubmit={onSubmit} />
+      {isLoading && <Loader />}
+      {error && <ErrorMessage message={error} />}
 
-      <button type="submit">Add contact</button>
-      {/* <label>
-        <span>Password:</span>
-        <input
-          {...register('password', { required: true, minLength: 7 })}
-          type="password"
-        />
-        {errors.password && <span>This field is required</span>}
-      </label> */}
-
-    </form>
-{isLoading && <Loader />}
-    <ul>
-      {Array.isArray(contacts) && contacts.map(({ id, name, number }) => (
-        <li key={id}>
-          <h3>{name}</h3>
-          <p>{number}</p>
-          <button onClick={() => onDeleteContact(id)}>delete</button>
-        </li>
-      ))}
-    </ul>
-</>
+      <Filter filterTerm={filterTerm} onFilterChange={handleFilterChange} />
+      <ContactList
+        contacts={contacts}
+        filterTerm={filterTerm}
+        onDeleteContact={onDeleteContact}
+      />
+    </>
   );
-}
+};
 
-export default ContactsPage
+export default ContactsPage;
