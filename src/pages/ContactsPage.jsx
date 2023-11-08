@@ -30,8 +30,19 @@ const ContactsPage = () => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const onSubmit = contact => {
-    dispatch(addContact(contact));
+  const onSubmit = newContact => {
+
+
+      const phoneBookHasContact = contacts.some(
+        contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
+      );
+
+      if (phoneBookHasContact) {
+        alert(`${newContact.name} is already in contacts`);
+        return;
+      }
+
+    dispatch(addContact(newContact));
     reset();
   };
 
